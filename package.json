@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "snapshot::brawl": "tsx ./scripts/2_brawl_snapshot",
     "snapshot::nft": "tsx ./scripts/1_nft_snapshot"
   },
   "keywords": [],
