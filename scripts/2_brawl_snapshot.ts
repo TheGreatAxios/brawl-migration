@@ -1,4 +1,4 @@
-import { createPublicClient, getContract, http } from "viem";
+import { createPublicClient, getContract, http, zeroAddress } from "viem";
 import { skaleBlockBrawlers } from "viem/chains";
 import abi from "../abis/blockBrawlersERC721.abi.json";
 import { writeFile } from "fs/promises";
@@ -10,6 +10,10 @@ type Balance = {
 }
 
 const BASE_URL = "https://frayed-decent-antares.explorer.mainnet.skalenodes.com/api?module=account&action=listaccounts";
+
+const BLACKLIST = [
+	"0xd2ba3e0000000000000000000000000000000000", // Etherbase
+];
 
 async function loadBalances(page: number, offset: number) {
 	const url = `${BASE_URL}&page=${page}&offset=${offset}`;
@@ -36,29 +40,27 @@ async function main() {
 	let balances: Balance[] = [];
 	let page = 1;
 	const offset = 250;
-	let hasMore = true;
-
-	
-		
-	
+	const MAX_BALANCE = BigInt("270000000000000000000000000");
 
 	while (true) {
 		// Construct the URL with page and offset parameters
 		let prevAccountLength = balances.length;
 		const data = await loadBalances(page, offset);
 
-		balances.push(...data.result.map(async(json: any) => {
-
-			const isContract = await client.getCode({
-				address: json.address
-			});
-
-			return {
-				"user": json.address,
-				"balance": json.balance,
-				"isContract": isContract !== undefined
+		const filteredList = data.result.filter((json: any) => {
+			if (json.address !== zeroAddress 			// Filter out zeroAddress
+				&& !BLACKLIST.includes(json.address)	// Filter out Blacklisted contracts
+				&& json.balance !== "0" 				// Filter out 0
+				&& BigInt(json.balance) <= MAX_BALANCE  // Filter out validator nodes on sChain who have > balance than possible
+			) {
+				return {
+					address: json.address,
+					balance: json.balance
+				};
 			}
-		}));
+		});
+
+		balances.push(...filteredList);
 
 		// Assuming the API returns an object with a "result" field containing the account list
 		// const accounts: any[] = data.result || [];
@@ -77,11 +79,6 @@ async function main() {
 		console.log(`Fetched page ${page - 1}, found ${balances.length} accounts`);
 	}
 
-	console.log("Balances: ", balances.length);
-
-
-	// const res = await fetch(`https://frayed-decent-antares.explorer.mainnet.skalenodes.com/api?module=account&action=listaccounts&page=${0}&offset=100`)
-
 	await writeFile(path.resolve(__dirname, `../snapshots/brawl-snapshot-${block.number}.json`), JSON.stringify({
 		block: {
 			number: block.number.toString(),
@@ -99,7 +96,7 @@ async function main() {
 		}
 	}, null, 4));
 
-
+	console.log("Addresses Tracked: ", balances.length);
 	console.timeEnd("Snapshot Completed In");
 	console.log("Snapshot written to: ", path.resolve(__dirname, `../snapshots/brawl-snapshot-${block.number}.json`));
 
