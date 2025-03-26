@@ -1,0 +1,20 @@
+{
+  "name": "brawl-migration",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "snapshot::nft": "tsx ./scripts/1_nft_snapshot"
+  },
+  "keywords": [],
+  "author": "TheGreatAxios <sawyer@dirtroad.dev>",
+  "license": "MIT",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.13.13",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "viem": "^2.23.15"
+  }
+}
