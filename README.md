@@ -15,12 +15,22 @@ This repo is open-sourced under the MIT License.
 
 ## Scripts
 
-### NFT Snapshot
+### NFT (ERC-721) Snapshot
 
 The NFT Snapshot grabs the BlockBrawlers contract on the BRAWL SKALE Chain and loops through the token ids to grab the owner and the hero code.
 
 ```shell
 npm run snapshot::nft
+```
+
+### BRAWL (ERC-20) Snapshot
+
+The BRAWl Snapshot grabs the BRAWL ERC-20 contract on the BRAWL SKALE Chain and loops through the token ids to grab the owner and the hero code.
+
+> Note, due to the unique design of BRAWL ontop of the sFUEL token; this filters out Etherbase and SKALE Validators
+
+```shell
+npm run snapshot::brawl
 ```
 
 This will write to the [snapshots](/snapshots) folder.
