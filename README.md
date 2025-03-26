@@ -28,7 +28,9 @@ See [Snapshots](#snapshots) below for more information.
 ## Snapshots
 
 Q: What is a snapshot?
+---
 A: Simple! A snapshot is a set of structured data representing some information at some given point in time.
 
 Q: What is the format?
+---
 A: The stored format is a JSON file with the data, timestamp, and block information. The name of the file is snapshot-type-blocknum.json.
