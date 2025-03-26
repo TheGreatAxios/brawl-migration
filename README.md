@@ -2,7 +2,8 @@
 
 This repo is a community good project to help users of the BRAWL Chain preserve their assets on SKALE with the BRAWL team no longer able to support with their chain payment.
 
-The author is not a member of the BRAWL team and has no affiliation with the team.
+The author is not a member of the BRAWL team and has no affiliation with the team. When a blockchain is being taken down, including a SKALE Chain, assets need to be either withdrawn from the bridge (when possible) OR migrated to a new chain.
+
 This repo is open-sourced under the MIT License.
 
 ## Setup & Installation
