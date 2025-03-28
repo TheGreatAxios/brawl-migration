@@ -2,9 +2,11 @@
 src = "src"
 out = "out"
 libs = ["lib", "dependencies"]
+fs_permissions = [{ access = "read", path = "../snapshots" }]
 
 [dependencies]
 forge-std = "1.9.6"
 "@openzeppelin-contracts" = "5.2.0"
 
-# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
+[rpc_endpoints]
+nebula_testnet = "https://testnet.skalenodes.com/v1/lanky-ill-funny-testnet"

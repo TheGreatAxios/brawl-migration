@@ -7,6 +7,7 @@ import {ERC20Burnable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC2
 import {ERC20Permit} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 
 error InsufficientSupplyAvailable();
+error InvalidInput();
 
 contract BrawlToken is ERC20, ERC20Burnable, AccessControl, ERC20Permit {
     
@@ -25,5 +26,19 @@ contract BrawlToken is ERC20, ERC20Burnable, AccessControl, ERC20Permit {
     function mint(address to, uint256 amount) public onlyRole(MINTER_ROLE) {
         if (totalSupply() + amount > MAX_SUPPLY) revert InsufficientSupplyAvailable();
         _mint(to, amount);
+    }
+
+    function batchMint(address[] memory tos, uint256[] memory amounts)  public onlyRole(MINTER_ROLE) {
+        if (tos.length != amounts.length) revert InvalidInput();
+        uint256 len = tos.length;
+
+        uint256 amountAdded = 0;
+
+        for (uint256 i = 0; i < len; i++) {
+            amountAdded += amounts[i];
+            _mint(tos[i], amounts[i]);
+        }
+
+        if (totalSupply() + amountAdded > MAX_SUPPLY) revert InsufficientSupplyAvailable();
     }
 }

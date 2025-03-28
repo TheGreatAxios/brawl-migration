@@ -4,13 +4,16 @@ pragma solidity ^0.8.13;
 import {Script, console} from "forge-std/Script.sol";
 import {BrawlToken} from "../src/BrawlToken.sol";
 
-contract CounterScript is Script {
+contract DeployTestnetScript is Script {
     BrawlToken public brawlToken;
 
     function setUp() public {}
 
     function run() public {
-        vm.startBroadcast();
+        
+        uint256 deployer = vm.envUint("PRIVATE_KEY");
+        vm.createSelectFork("nebula_testnet");
+        vm.startBroadcast(deployer);
 
         brawlToken = new BrawlToken("Brawl Token", "BRAWL");
 
