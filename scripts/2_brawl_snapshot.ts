@@ -1,6 +1,5 @@
-import { createPublicClient, getContract, http, zeroAddress } from "viem";
+import { createPublicClient, http, zeroAddress } from "viem";
 import { skaleBlockBrawlers } from "viem/chains";
-import abi from "../abis/blockBrawlersERC721.abi.json";
 import { writeFile } from "fs/promises";
 import * as path from "path";
 

@@ -5,7 +5,7 @@ import {Test, console} from "forge-std/Test.sol";
 import {BrawlHeroes} from "../src/BrawlHeroes.sol";
 
 contract BrawlHeroesTest is Test {
-    BrawlHeroes public brawlHeroes;
+    BrawlHeroes private brawlHeroes;
 
     function setUp() public {
         brawlHeroes = new BrawlHeroes("Brawl Heroes", "HERO");
@@ -18,7 +18,9 @@ contract BrawlHeroesTest is Test {
 
     function testFuzz_Mint(uint256 x) public {
         address rng = vm.randomAddress();
-        brawlHeroes.safeMint(rng, x);
+        BrawlHeroes.MintableHero[] memory heroes = new BrawlHeroes.MintableHero[](1);
+        heroes[0] = BrawlHeroes.MintableHero(rng, x, x >> 5);
+        brawlHeroes.mintBatch(heroes);
         assertEq(brawlHeroes.balanceOf(rng), 1);
         assertEq(brawlHeroes.ownerOf(x), rng);
     }
