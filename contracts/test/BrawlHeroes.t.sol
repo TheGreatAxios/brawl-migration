@@ -8,7 +8,7 @@ contract BrawlHeroesTest is Test {
     BrawlHeroes private brawlHeroes;
 
     function setUp() public {
-        brawlHeroes = new BrawlHeroes("Brawl Heroes", "HERO");
+        brawlHeroes = new BrawlHeroes("Brawl Heroes", "HERO", "ipfs://QmVNiWuUSGNabL9RwcvsghobnhWHXqUuKdzKdGBgpJfGm8/", "gif");
     }
 
     function test_RevertsWhen_BalanceOf() public {
@@ -23,5 +23,15 @@ contract BrawlHeroesTest is Test {
         brawlHeroes.mintBatch(heroes);
         assertEq(brawlHeroes.balanceOf(rng), 1);
         assertEq(brawlHeroes.ownerOf(x), rng);
+    }
+
+    function test_Uris() public {
+        address rng = vm.randomAddress();
+        BrawlHeroes.MintableHero[] memory heroes = new BrawlHeroes.MintableHero[](1);
+        heroes[0] = BrawlHeroes.MintableHero(rng, 0, 22300785707104958605423891346518438181863497);
+        brawlHeroes.mintBatch(heroes);
+        // console.log();
+        // brawlHeroes.generateHeroToken(22300785707104958605423891346518438181863497);
+        brawlHeroes.tokenURI(0);
     }
 }

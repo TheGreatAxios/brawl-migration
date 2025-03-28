@@ -8,6 +8,8 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ERC721Burnable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import {HeroData} from "./HeroData.sol";
 
+error InvalidClan();
+error InvalidClass();
 error InvalidAddress();
 error MintLimitReached();
 
@@ -21,18 +23,23 @@ contract BrawlHeroes is ERC721, ERC721Burnable, AccessControl, HeroData {
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     uint256 public constant MINTS_ALLOWED = 15575;
-
     uint256 public currentTokenId;
+    string public baseURI;
+    string public heroImageSuffix;
 
     // tokenId => heroCode
     mapping(uint256 => uint256) public heroCodes;
 
     constructor(
         string memory _name,
-        string memory _symbol
+        string memory _symbol,
+        string memory _baseURI,
+        string memory _heroImageSuffix
     ) ERC721(_name, _symbol) {
         _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
         _grantRole(MINTER_ROLE, _msgSender());
+        baseURI = _baseURI;
+        heroImageSuffix = _heroImageSuffix;
     }
 
     function mintBatch(MintableHero[] memory heroes) public onlyRole(MINTER_ROLE) {
@@ -51,7 +58,7 @@ contract BrawlHeroes is ERC721, ERC721Burnable, AccessControl, HeroData {
         // require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
         
         // Retrieve the hero token data (assuming you have a method to get the token)
-        HeroToken memory heroToken = generateHeroToken(tokenId);
+        HeroToken memory heroToken = generateHeroToken(heroCodes[tokenId]);
         
         // Break down the JSON creation into smaller parts
         string memory basicAttributes = string(
@@ -106,7 +113,8 @@ contract BrawlHeroes is ERC721, ERC721Burnable, AccessControl, HeroData {
                             '"description": "Legendary Hero with unique attributes",',
                             '"attributes": [',
                                 combinedAttributes,
-                            ']',
+                            '],',
+                            '"image": "',baseURI,getClass(heroToken.class),'_',getClan(heroToken.clan),'.',heroImageSuffix,'"'
                         '}'
                     )
                 )
@@ -120,6 +128,27 @@ contract BrawlHeroes is ERC721, ERC721Burnable, AccessControl, HeroData {
                 json
             )
         );
+    }
+
+    function getClass(uint256 class) public pure returns (string memory) {
+        if (class == 60) return "barbarian";
+        if (class == 61) return "warrior";
+        if (class == 62) return "knight";
+        if (class == 63) return "amazon";
+        if (class == 64) return "rogue";
+        if (class == 65) return "monk";
+        if (class == 67) return "cleric";
+        if (class == 68) return "witch";
+        revert InvalidClass();
+    }
+
+    function getClan(uint256 clan) public pure returns (string memory) {
+        if (clan == 28) return "fire";
+        if (clan == 29) return "water";
+        if (clan == 30) return "air";
+        if (clan == 31) return "earth";
+        if (clan == 32) return "doom";
+        revert InvalidClan();
     }
 
     function generateHeroToken(uint256 heroCode) public pure returns (HeroToken memory) {
