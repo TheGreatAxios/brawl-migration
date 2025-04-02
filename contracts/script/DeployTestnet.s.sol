@@ -3,9 +3,11 @@ pragma solidity ^0.8.13;
 
 import {Script, console} from "forge-std/Script.sol";
 import {BrawlToken} from "../src/BrawlToken.sol";
+import {BrawlHeroes} from "../src/BrawlHeroes.sol";
 
 contract DeployTestnetScript is Script {
     BrawlToken public brawlToken;
+    BrawlHeroes public brawlHeroes;
 
     function setUp() public {}
 
@@ -16,6 +18,7 @@ contract DeployTestnetScript is Script {
         vm.startBroadcast(deployer);
 
         brawlToken = new BrawlToken("Brawl Token", "BRAWL");
+        brawlHeroes = new BrawlHeroes("Brawl Heroes", "HERO", "ipfs://QmVNiWuUSGNabL9RwcvsghobnhWHXqUuKdzKdGBgpJfGm8/", "gif");
 
         vm.stopBroadcast();
     }

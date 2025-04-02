@@ -1,9 +1,10 @@
-import { createPublicClient, createWalletClient, getContract, http, isHex, nonceManager, zeroAddress } from "viem";
-import { skaleBlockBrawlers, skaleNebula, skaleNebulaTestnet } from "viem/chains";
+import { createWalletClient, http, nonceManager } from "viem";
+import { skaleNebula, skaleNebulaTestnet } from "viem/chains";
 import BrawlTokenNebulaABI from "../abis/brawlTokenNebula.abi.json";
 import TokenSnapshot from "../snapshots/brawl-snapshot-7461153.json";
 import { privateKeyToAccount } from "viem/accounts";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 type Token = {

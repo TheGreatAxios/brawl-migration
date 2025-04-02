@@ -48,8 +48,10 @@ contract BrawlHeroes is ERC721, ERC721Burnable, AccessControl, HeroData {
         for (uint256 i = 0; i < len; i++) {
             if (currentTokenId > MINTS_ALLOWED) revert MintLimitReached();
             if (heroes[i].to == address(0)) revert InvalidAddress();
+        
             _safeMint(heroes[i].to, heroes[i].tokenId);
             heroCodes[heroes[i].tokenId] = heroes[i].heroCode;
+            
             currentTokenId++;
         }
     }

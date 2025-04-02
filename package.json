@@ -5,7 +5,8 @@
   "scripts": {
     "snapshot::brawl": "tsx ./scripts/2_brawl_snapshot",
     "snapshot::brawl::drop": "tsx ./scripts/3_airdrop_brawl",
-    "snapshot::nft": "tsx ./scripts/1_nft_snapshot"
+    "snapshot::nft": "tsx ./scripts/1_nft_snapshot",
+    "snapshot::nft::drop": "tsx ./scripts/4_airdrop_heroes"
   },
   "keywords": [],
   "author": "TheGreatAxios <sawyer@dirtroad.dev>",
