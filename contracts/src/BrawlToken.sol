@@ -13,8 +13,6 @@ contract BrawlToken is ERC20, ERC20Burnable, AccessControl, ERC20Permit {
     
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
-    uint256 public constant MAX_SUPPLY = 270000000 * 10**18;
-
     constructor(string memory _name, string memory _symbol)
         ERC20(_name, _symbol)
         ERC20Permit("BrawlToken")
@@ -24,11 +22,10 @@ contract BrawlToken is ERC20, ERC20Burnable, AccessControl, ERC20Permit {
     }
 
     function mint(address to, uint256 amount) public onlyRole(MINTER_ROLE) {
-        if (totalSupply() + amount > MAX_SUPPLY) revert InsufficientSupplyAvailable();
         _mint(to, amount);
     }
 
-    function batchMint(address[] memory tos, uint256[] memory amounts)  public onlyRole(MINTER_ROLE) {
+    function batchMint(address[] memory tos, uint256[] memory amounts) public onlyRole(MINTER_ROLE) {
         if (tos.length != amounts.length) revert InvalidInput();
         uint256 len = tos.length;
 
@@ -38,7 +35,5 @@ contract BrawlToken is ERC20, ERC20Burnable, AccessControl, ERC20Permit {
             amountAdded += amounts[i];
             _mint(tos[i], amounts[i]);
         }
-
-        if (totalSupply() + amountAdded > MAX_SUPPLY) revert InsufficientSupplyAvailable();
     }
 }

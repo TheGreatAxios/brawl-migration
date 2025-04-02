@@ -1,4 +1,4 @@
-import { createPublicClient, createWalletClient, getContract, http, isHex, zeroAddress } from "viem";
+import { createPublicClient, createWalletClient, getContract, http, isHex, nonceManager, zeroAddress } from "viem";
 import { skaleBlockBrawlers, skaleNebula, skaleNebulaTestnet } from "viem/chains";
 import BrawlTokenNebulaABI from "../abis/brawlTokenNebula.abi.json";
 import TokenSnapshot from "../snapshots/brawl-snapshot-7461153.json";
@@ -15,10 +15,9 @@ type Token = {
 const isTestnet = true;
 
 const chain = isTestnet ? skaleNebulaTestnet : skaleNebula;
-const contractAddress = isTestnet ? "0xbF5841cAb6F82710c445767087e9313Fd9A0dc75" : "0x"
+const contractAddress = isTestnet ? "0xE8b11401351aD4501305fa8E04E259B818af752F" : "0x"
 
 async function main() {
-	let tokens: Token[] = [];
 
 	const PRIVATE_KEY = process.env.PRIVATE_KEY;
 	if (!PRIVATE_KEY) {
@@ -28,25 +27,33 @@ async function main() {
 	const walletClient = createWalletClient({
 		chain: chain,
 		transport: http(),
-		account: privateKeyToAccount(PRIVATE_KEY as `0x${string}`)
-
+		account: privateKeyToAccount(PRIVATE_KEY as `0x${string}`, {
+			nonceManager
+		})
 	});
 
-	const contract = getContract({
-		abi: BrawlTokenNebulaABI,
-		address: contractAddress,
-		client: {
-			wallet: walletClient
+	const dropList: Token[] = (TokenSnapshot.data.balances as Token[]).filter((v) => {
+		if (v.balance !== "" && BigInt(v.balance) > BigInt(0)) {
+			return v;
 		}
 	});
 
-	const dropList = TokenSnapshot.data.balances as Token[];
+	const addresses = dropList.map((v) => v.address);
+	const balances = dropList.map((v) => v.balance);
 
-	// TODO -> generate batches of 1000 addresses & amounts & send batch transactions
-	// After sending, validate the balances of the entire list through a large multicall read
-	for (let i = 0; i < dropList.length; i+=1000) {
-		// const addresses = batchList.
-	}
+	// Should work for up to 13,000
+	const res = await walletClient.writeContract({
+		abi: BrawlTokenNebulaABI,
+		address: contractAddress,
+		functionName: "batchMint",
+		args: [
+			addresses,
+			balances.map((v) => BigInt(v))
+		],
+		gas: BigInt(268_000_000)
+	});
+
+	console.log("Batch Mint Transaction Hash: ", res);
 
 }
 

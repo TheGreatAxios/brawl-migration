@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "snapshot::brawl": "tsx ./scripts/2_brawl_snapshot",
+    "snapshot::brawl::drop": "tsx ./scripts/3_airdrop_brawl",
     "snapshot::nft": "tsx ./scripts/1_nft_snapshot"
   },
   "keywords": [],
