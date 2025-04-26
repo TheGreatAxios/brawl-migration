@@ -42,20 +42,19 @@ async function main() {
 	const addresses = dropList.map((v) => v.address);
 	const balances = dropList.map((v) => v.balance);
 
-	// Should work for up to 13,000
-	const res = await walletClient.writeContract({
-		abi: BrawlTokenNebulaABI,
-		address: contractAddress,
-		functionName: "batchMint",
-		args: [
-			addresses,
-			balances.map((v) => BigInt(v))
-		],
-		gas: BigInt(268_000_000)
-	});
-
-	console.log("Batch Mint Transaction Hash: ", res);
-
+	for (let i = 0; i < balances.length; i+=250) {
+		const res = await walletClient.writeContract({
+			abi: BrawlTokenNebulaABI,
+			address: contractAddress,
+			functionName: "batchMint",
+			args: [
+				addresses,
+				balances.slice(i, i+250).map((v) => BigInt(v))
+			],
+			gas: BigInt(268_000_000)
+		});
+		console.log("Batch Mint Transaction Hash: ", res);
+	}
 }
 
 main()

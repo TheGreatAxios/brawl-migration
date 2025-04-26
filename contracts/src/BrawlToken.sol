@@ -28,6 +28,7 @@ contract BrawlToken is ERC20, ERC20Burnable, AccessControl, ERC20Permit {
     function batchMint(address[] memory tos, uint256[] memory amounts) public onlyRole(MINTER_ROLE) {
         if (tos.length != amounts.length) revert InvalidInput();
         uint256 len = tos.length;
+        if (len > 250) revert("Batch too large");
 
         uint256 amountAdded = 0;
 

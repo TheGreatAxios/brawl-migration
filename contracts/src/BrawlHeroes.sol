@@ -44,7 +44,8 @@ contract BrawlHeroes is ERC721, ERC721Burnable, AccessControl, HeroData {
 
     function mintBatch(MintableHero[] memory heroes) public onlyRole(MINTER_ROLE) {
         uint256 len = heroes.length;
-
+        if (len > 250) revert("Batch too large");
+        
         for (uint256 i = 0; i < len; i++) {
             if (currentTokenId > MINTS_ALLOWED) revert MintLimitReached();
             if (heroes[i].to == address(0)) revert InvalidAddress();

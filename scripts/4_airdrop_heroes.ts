@@ -50,13 +50,13 @@ async function main() {
 		}
 	}).filter((v) => v.to !== zeroAddress);
 	// Should work for up to 13,000
-	for (let i = 0; i < heroes.length; i+=500) {
+	for (let i = 0; i < heroes.length; i+=250) {
 		const res = await walletClient.writeContract({
 			abi: HeroesNebulaABI,
 			address: contractAddress,
 			functionName: "mintBatch",
 			args: [
-				heroes.slice(i, i+500)
+				heroes.slice(i, i+250)
 			]
 		});
 		console.log("Batch Mint Transaction Hash: ", res);

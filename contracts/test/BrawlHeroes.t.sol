@@ -30,8 +30,6 @@ contract BrawlHeroesTest is Test {
         BrawlHeroes.MintableHero[] memory heroes = new BrawlHeroes.MintableHero[](1);
         heroes[0] = BrawlHeroes.MintableHero(rng, 0, 22300785707104958605423891346518438181863497);
         brawlHeroes.mintBatch(heroes);
-        // console.log();
-        // brawlHeroes.generateHeroToken(22300785707104958605423891346518438181863497);
         brawlHeroes.tokenURI(0);
     }
 }
