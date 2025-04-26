@@ -10,3 +10,4 @@ forge-std = "1.9.6"
 
 [rpc_endpoints]
 nebula_testnet = "https://testnet.skalenodes.com/v1/lanky-ill-funny-testnet"
+nebula_mainnet = "https://mainnet.skalenodes.com/v1/green-giddy-denebola"

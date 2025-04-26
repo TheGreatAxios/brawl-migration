@@ -18,7 +18,6 @@ contract BrawlTokenTest is Test {
     }
 
     function testFuzz_Mint(uint256 x) public {
-        vm.assume(x <= brawlToken.MAX_SUPPLY());
         address rng = vm.randomAddress();
         brawlToken.mint(rng, x);
         assertEq(brawlToken.balanceOf(rng), x);

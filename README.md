@@ -10,6 +10,7 @@ This repo is open-sourced under the MIT License.
 
 1. Clone the repo: https://github.com/thegreataxios/brawl-migration
 2. Run `npm install`
+3. Run `cp .env.example .env`, add in PRIVATE_KEY starting with 0x
 
 > Note if you don't have Node v23.x install with nvm
 

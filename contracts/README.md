@@ -1,15 +1,29 @@
-## Foundry
+# Brawl Migration Contracts
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+## Setup
 
-Foundry consists of:
+1. Run `cp .env.example .env` and copy the same private key in that you used in the root
+2. Run `forge compile` to make sure everything builds
+3. Visit https://sfuelstation.com and gas up your wallet on Nebula Mainnet & Testnet
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## Deploying to Testnet
 
-## Documentation
+1. Run `forge clean`
+2. Run:
+```shell
+forge script ./scripts/DeployTestnet.s.sol --legacy --broadcast --slow
+```
+
+## Deploying to Mainnet
+1. Run `forge clean`
+2. Run:
+```shell
+forge script ./scripts/DeployMainnet.s.sol --legacy --broadcast --slow
+```
+
+> Note, if your wallet is not whitelisted this will fail
+
+## Foundry Documentation
 
 https://book.getfoundry.sh/
 
